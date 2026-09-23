@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Products')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Products</h2>
+    <a th:href="@{/products/new}" class="btn btn-primary">+ New Product</a>
+  </div>
+  <form th:action="@{/products}" method="get" class="row g-2 mb-3" style="max-width:400px">
+    <div class="col"><input type="text" name="q" th:value="${q}" class="form-control" placeholder="Search by name"></div>
+    <div class="col-auto"><button class="btn btn-outline-secondary">Search</button></div>
+  </form>
+  <table class="table table-striped align-middle">
+    <thead>
+    <tr><th>Name</th><th>SKU</th><th>Category</th><th>Supplier</th><th>Price</th><th>Stock</th><th style="width:160px">Actions</th></tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${products}">
+      <td th:text="${p.name}"></td>
+      <td th:text="${p.sku}"></td>
+      <td th:text="${p.categoryName}"></td>
+      <td th:text="${p.supplierName}"></td>
+      <td th:text="${#numbers.formatDecimal(p.price,1,2)}"></td>
+      <td>
+                <span th:text="${p.quantity}"
+                      th:classappend="${p.quantity <= p.reorderLevel} ? 'badge text-bg-danger' : 'badge text-bg-success'"></span>
+      </td>
+      <td>
+        <a th:href="@{/products/{id}/edit(id=${p.id})}" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a th:href="@{/products/{id}/delete(id=${p.id})}" class="btn btn-sm btn-outline-danger"
+           onclick="return confirm('Delete this product?')">Delete</a>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(products)}">
+      <td colspan="7" class="text-center text-muted">No products found.</td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

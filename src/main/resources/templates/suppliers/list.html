@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Suppliers')}"></head>
+<body>
+<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<main class="container my-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Suppliers</h2>
+    <a th:href="@{/suppliers/new}" class="btn btn-primary">+ New Supplier</a>
+  </div>
+  <table class="table table-striped">
+    <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Address</th><th style="width:160px">Actions</th></tr></thead>
+    <tbody>
+    <tr th:each="s : ${suppliers}">
+      <td th:text="${s.name}"></td>
+      <td th:text="${s.email}"></td>
+      <td th:text="${s.phone}"></td>
+      <td th:text="${s.address}"></td>
+      <td>
+        <a th:href="@{/suppliers/{id}/edit(id=${s.id})}" class="btn btn-sm btn-outline-secondary">Edit</a>
+        <a th:href="@{/suppliers/{id}/delete(id=${s.id})}" class="btn btn-sm btn-outline-danger"
+           onclick="return confirm('Delete this supplier?')">Delete</a>
+      </td>
+    </tr>
+    <tr th:if="${#lists.isEmpty(suppliers)}">
+      <td colspan="5" class="text-center text-muted">No suppliers yet.</td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+</body>
+</html>
